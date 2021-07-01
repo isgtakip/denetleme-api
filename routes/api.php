@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Http\Controllers\AuditsFormController;
 use App\Http\Controllers\IconsController;
+use App\Http\Controllers\AbilitesController;
 
 
 /*
@@ -21,7 +22,7 @@ use App\Http\Controllers\IconsController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
@@ -48,5 +49,10 @@ Route::post('/sanctum/token', function (Request $request) {
 });
 
 
+Route::group(['middleware' => ['auth:sanctum']], function () {
+
 Route::apiResource('audit_forms',AuditsFormController::class);
 Route::apiResource('icons',IconsController::class);
+Route::get('getAllPermissionsAttribute', [AbilitesController::class, 'getAllPermissionsAttribute']);
+
+});
