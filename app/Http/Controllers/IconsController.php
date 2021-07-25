@@ -66,6 +66,22 @@ class IconsController extends Controller
             $save->icon_url= $filename.".".$extension;
             $save->save();
 
+
+                    /*
+                                $year = date("Y");   
+                    $month = date("m");   
+                    $filename = "../".$year;   
+                    $filename2 = "../".$year."/".$month;
+
+                    if(file_exists($filename)){
+                        if(file_exists($filename2)==false){
+                            mkdir($filename2,0777);
+                        }
+                    }else{
+                        mkdir($filename,0777);
+                    }
+                    */
+
             return response()->json([
                 "success" => true,
                 "message" => "File successfully uploaded",
