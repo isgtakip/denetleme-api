@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AuditsFormModel;
+use App\Models\Icons;
+use App\Models\Sections;
 
 class AuditsFormController extends Controller
 {
@@ -12,10 +14,27 @@ class AuditsFormController extends Controller
      *
      * @return \Illuminate\Http\ResponseW
      */
+    private function get_audit_forms($id=null){
+
+        if ($id==null){
+            $forms=AuditsFormModel::join('icons','icons.icon_id','=','audits_form.audit_form_icon_id')
+            ->get(['audits_form.*','icons.icon_id','icons.icon_url']);
+        }
+        else{
+            $forms=AuditsFormModel::join('icons','icons.icon_id','=','audits_form.audit_form_icon_id')
+            ->where('audits_form.audit_form_id', $id)
+            ->get(['audits_form.*','icons.icon_id','icons.icon_url']);
+        }
+        return $forms;
+    }
+
     public function index()
     {
         //
-        return response()->json(AuditsFormModel::get(),200);
+
+        //icon url ile birlikte getir
+        $forms=$this->get_audit_forms();
+        return response()->json($forms,200);
     }
 
     /**
@@ -37,6 +56,25 @@ class AuditsFormController extends Controller
     public function store(Request $request)
     {
         //
+         $forms = new AuditsFormModel();
+         $forms->audit_form_name = $request->audit_form_name;
+         $forms->audit_form_no = $request->audit_form_no;
+         $forms->audit_form_icon_id=$request->audit_form_icon_id;
+         $forms->icon_id=$request->audit_form_icon_id;
+         $forms->audit_form_score_needed=1;
+         $forms->save();
+
+         //section ekle
+         $section = new Sections();
+         $section->section_name ="Genel";
+         $section->section_order=0;
+         $section->audit_form_id=$forms->audit_form_id;
+         $section->save();
+
+
+         $form=$this->get_audit_forms($forms->audit_form_id);
+         return response()->json($form,200);
+
     }
 
     /**
@@ -48,7 +86,8 @@ class AuditsFormController extends Controller
     public function show($id)
     {
         //
-        return response()->json([AuditsFormModel::find($id)],200);
+        $form=$this->get_audit_forms($id);
+        return response()->json($form,200);
 
     }
 
@@ -81,8 +120,17 @@ class AuditsFormController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($audit_form_id)
     {
         //
+        $form = AuditsFormModel::findOrFail($audit_form_id);
+        $icon = Icons::findOrFail($form->icon_id);
+
+
+        AuditsFormModel::destroy($audit_form_id);
+        if ($icon->default_icon_set != 0) $icon->delete();
+
+
+        return response()->json(['audit_form_id'=>$audit_form_id],200);
     }
 }

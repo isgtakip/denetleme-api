@@ -32,6 +32,9 @@ class AnswerTypesSeeder extends Seeder
             [
                 'answer_type' => 'Text',
             ],
+            [
+                'answer_type' => 'File',
+            ],
          
         ];
         
