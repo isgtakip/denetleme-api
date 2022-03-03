@@ -14,6 +14,17 @@ class AuditsFormController extends Controller
      *
      * @return \Illuminate\Http\ResponseW
      */
+    public function getAllAuditForms(Request $request){
+
+        $search = $request->query('search');
+        $per_page = $request->query('per_page');
+
+        return response()->json(AuditsFormModel::where(function($query) use ($search) {
+            $query->where('audits_form.audit_form_name', 'like', '%'.$search.'%')
+            ->orWhere('audits_form.audit_form_no', 'like', '%'.$search.'%');
+        })
+        ->paginate($per_page)->appends(request()->query()),200);
+    }
     private function get_audit_forms($id=null){
 
         if ($id==null){

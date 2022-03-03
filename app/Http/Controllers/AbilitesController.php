@@ -15,9 +15,6 @@ class AbilitesController extends Controller
 
     }
     public function getAllPermissionsAttribute() {
-
-
-
      return  response()->json(auth()->user()->getAllPermissions()->pluck('name'),200);
     }
 

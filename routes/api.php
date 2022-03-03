@@ -19,7 +19,7 @@ use App\Http\Controllers\FirmsController;
 use App\Http\Controllers\IlController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\AuditsController;
 
 
 
@@ -80,6 +80,11 @@ Route::get('ana_firmalar',[FirmsController::class, 'getAnaFirmalar']);
 Route::get('getFirmsAllData',[FirmsController::class, 'getFirmsAllData']);
 Route::apiResource('lokasyonlar',FirmsController::class);
 Route::get('il',[IlController::class, 'index']);
-Route::apiResource('roles',RoleController::class);
-Route::apiResource('users',UserController::class);
+Route::resource('roles',RoleController::class);
+Route::resource('users',UserController::class);
+Route::get('getAllRoles',[RoleController::class, 'getAllRoles']);
+
 });
+Route::get('getAllAuditForms',[AuditsFormController::class, 'getAllAuditForms']);
+
+Route::apiResource('audits',AuditsController::class);

@@ -137,9 +137,7 @@ class FirmsController extends Controller
          $firma->firma_sgk=$request->firma_sgk;
          $firma->firma_il_id=$request->firma_il_id;
          $firma->firma_ilce_id=$request->firma_ilce_id;
-        
-        
-            $firma->update();
+         $firma->update();
          
          //firma bilgileri geri döndürülecek daha sonra 
          return response()->json("Firma Kaydı düzeltilmiştir", 200);

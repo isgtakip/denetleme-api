@@ -14,6 +14,12 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function getAllRoles(){
+
+        $roles = Role::orderBy('name')->get();
+        return response()->json($roles,200);
+    }
+
     public function index(Request $request)
     {
         //
@@ -34,7 +40,9 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        //$permission = Permission::get();
+        $permission = Permission::orderBy('name')->get();
+        return response()->json($permission,200);
     }
 
     /**
@@ -46,6 +54,21 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         //
+
+        $this->validate($request, [
+            'name' => 'required|unique:roles,name',
+            'permission' => 'required',
+        ]);
+         
+    
+
+        $role = Role::create(['name' => $request->input('name')]);
+        $arr = json_decode($request->permission, true);
+        $role->syncPermissions($arr);
+     
+
+        return response()->json('Role Başarı ile eklendi',200);
+
     }
 
     /**
@@ -57,6 +80,13 @@ class RoleController extends Controller
     public function show($id)
     {
         //
+
+        $role = Role::find($id);
+        $rolePermissions = Permission::join("role_has_permissions","role_has_permissions.permission_id","=","permissions.id")
+            ->where("role_has_permissions.role_id",$id)
+            ->get();
+
+        return response()->json($rolePermissions,200);
     }
 
     /**
@@ -80,6 +110,22 @@ class RoleController extends Controller
     public function update(Request $request, $id)
     {
         //
+        
+        $this->validate($request, [
+            'name' => 'required',
+            'permission' => 'required',
+        ]);
+    
+        $role = Role::find($id);
+        $role->name = $request->input('name');
+        $role->save();
+
+        $arr = json_decode($request->permission, true);
+        $role->syncPermissions($arr);
+
+        return response()->json('Role Başarı ile düzenlendi',200);
+
+    
     }
 
     /**
@@ -91,5 +137,7 @@ class RoleController extends Controller
     public function destroy($id)
     {
         //
+        DB::table("roles")->where('id',$id)->delete();
+        return response()->json($id,200);
     }
 }
