@@ -21,15 +21,22 @@ class FirmsController extends Controller
         $firma_tur = $request->query('firma_tur');
         $per_page = $request->query('per_page');
         $ust_firma_id = $request->query('ust_firma_id');
-        
-        return response()->json(FirmsModel::where('firms.firma_turu', $firma_tur)
-        ->where('ust_firma_id',$ust_firma_id)
-        ->where(function($query) use ($search) {
+
+        if ($ust_firma_id==0){
+                $query= FirmsModel::whereRaw('1 = 1');
+        }
+        else{
+                $query= FirmsModel::withoutGlobalScopes();
+        }
+        $query->where('firms.firma_turu', $firma_tur);
+        $query->where('ust_firma_id',$ust_firma_id);
+        $query->where(function($query) use ($search) {
             $query->where('firms.firma_tam_unvan', 'like', '%'.$search.'%')
             ->orWhere('firma_kisa_ad', 'like', '%'.$search.'%');
-        })
-        ->leftJoin('nace_kodlari as nace', 'nace.nace_kod_id', '=', 'firms.nace_kod_id')
-        ->paginate($per_page)->appends(request()->query()),200);
+        });
+        $query->leftJoin('nace_kodlari as nace', 'nace.nace_kod_id', '=', 'firms.nace_kod_id');
+        
+        return response()->json($query->paginate($per_page)->appends(request()->query()),200);
     }
 
     public function getAnaFirmalar(){
@@ -124,9 +131,10 @@ class FirmsController extends Controller
     {
         //
 
+         
          //put requesti buraya geliyor 
-         $firma = FirmsModel::find($id);
-      
+         $firma = FirmsModel::withoutGlobalScopes()->find($id);
+       
          $firma->firma_tam_unvan = $request->firma_unvan;
          $firma->firma_tip_id = $request->firma_tip_id;
          $firma->firma_kisa_ad = $request->firma_kisa_ad;
@@ -153,7 +161,7 @@ class FirmsController extends Controller
     {
         //
 
-        FirmsModel::destroy($firma_id); 
+        FirmsModel::withoutGlobalScopes()->find($firma_id)->delete();
         //firma id yi geri döndür
         return response()->json($firma_id,200);
     }

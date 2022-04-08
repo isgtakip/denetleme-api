@@ -20,8 +20,9 @@ use App\Http\Controllers\IlController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuditsController;
-
-
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\QuizController;
+use App\Http\Resources\UserResource;
 
 
 /*
@@ -36,7 +37,8 @@ use App\Http\Controllers\AuditsController;
 */
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    $user = $request->user(); 
+    return response()->json(new UserResource(User::findOrFail($user->id)));
 });
 
 
@@ -64,17 +66,17 @@ Route::post('/sanctum/token', function (Request $request) {
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 Route::apiResource('audit_forms',AuditsFormController::class);
+Route::resource('audit_forms.sections', SectionController::class)->shallow();
+
 Route::apiResource('icons',IconsController::class);
 Route::apiResource('questiontypes',QtypesController::class);
 Route::get('getAllPermissionsAttribute', [AbilitesController::class, 'getAllPermissionsAttribute']);
-Route::resource('audit_forms.sections', SectionController::class)->shallow();;
 Route::post('addSections', [SectionController::class, 'addSections']);
 Route::resource('sections.questions', QuestionsController::class)->shallow();;
 Route::post('addQuestion', [QuestionsController::class, 'addQuestion']);
 Route::apiResource('optionsets',OptionSetsController::class);
-Route::apiResource('nace_kodlari',NaceKodlariController::class);
+
 Route::resource('optionsets.options', OptionsController::class)->shallow();
-Route::apiResource('firmalar',FirmsController::class);
 Route::get('firma_form_data',[FirmsController::class, 'formsData']);
 Route::get('ana_firmalar',[FirmsController::class, 'getAnaFirmalar']);
 Route::get('getFirmsAllData',[FirmsController::class, 'getFirmsAllData']);
@@ -83,8 +85,22 @@ Route::get('il',[IlController::class, 'index']);
 Route::resource('roles',RoleController::class);
 Route::resource('users',UserController::class);
 Route::get('getAllRoles',[RoleController::class, 'getAllRoles']);
+ 
+Route::apiResource('firmalar',FirmsController::class);
+Route::get('il',[IlController::class, 'index']);
 
+Route::resource('audits.forms', QuizController::class);
+Route::apiResource('audits',AuditsController::class);
+Route::apiResource('nace_kodlari',NaceKodlariController::class);
+
+
+//sadece süper adminin ulaşabileceği
+Route::group(['middleware' => ['role:Super Admin']], function () {
+    Route::apiResource('customers',CustomerController::class);
 });
+
 Route::get('getAllAuditForms',[AuditsFormController::class, 'getAllAuditForms']);
 
-Route::apiResource('audits',AuditsController::class);
+
+});
+

@@ -22,7 +22,7 @@ class UserController extends Controller
         $search = $request->query('search');
         $per_page = $request->query('per_page');
 
-        return response()->json(User::where(function($query) use ($search) {
+        return response()->json(User::with('roles')->where(function($query) use ($search) {
             $query->where('users.email', 'like', '%'.$search.'%')
             ->orWhere('users.name', 'like', '%'.$search.'%');
         })
@@ -81,7 +81,6 @@ class UserController extends Controller
         $user = User::find($id);
         //$roles = Role::pluck('name','name')->all();
         $userRole = $user->roles->pluck('id')->all();
-
         return response()->json(['role_id'=>$userRole],200);
     }
 

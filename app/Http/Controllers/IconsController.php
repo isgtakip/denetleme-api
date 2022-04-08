@@ -54,7 +54,7 @@ class IconsController extends Controller
          }
 
          if ($file = $request->file('file')) {
-            $path = $file->store('public/files');
+            $path = $file->store('files', ['disk' => 'my_files']);//$file->store('files');
             $name = $file->getClientOriginalName();
 
             $filename = pathinfo($path, PATHINFO_FILENAME);
@@ -67,27 +67,14 @@ class IconsController extends Controller
             $save->save();
 
 
-                    /*
-                                $year = date("Y");   
-                    $month = date("m");   
-                    $filename = "../".$year;   
-                    $filename2 = "../".$year."/".$month;
-
-                    if(file_exists($filename)){
-                        if(file_exists($filename2)==false){
-                            mkdir($filename2,0777);
-                        }
-                    }else{
-                        mkdir($filename,0777);
-                    }
-                    */
+            
 
             return response()->json([
                 "success" => true,
                 "message" => "File successfully uploaded",
                 "file" =>  [             'icon_id' => $save->icon_id,
                                           'icon_name' => $save->icon_name,
-                                          'icon_url' => 'http://localhost:8000/storage/files/'.$save->icon_url,
+                                          'icon_url' => "http://localhost:8000/storage/files/".$save->icon_url,
                                           'created_at' => (string) $save->created_at,
                                           'updated_at' => (string) $save->updated_at
                                           ]
@@ -107,7 +94,9 @@ class IconsController extends Controller
     public function show($id)
     {
         //
-
+        $q=DB::table('icons')
+        ->where('icon_id', '=', $id)->get();
+        return response()->json(IconsResource::collection($q),200);
     }
 
     /**

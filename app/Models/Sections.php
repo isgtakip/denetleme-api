@@ -21,4 +21,14 @@ class Sections extends Model
         'audit_form_id',
     ];
 
+
+
+    public function questions(){
+        return $this->hasMany(Questions::class,'section_id');
+    }
+
+    public function sorular() {
+        return $this->questions()->where('up_question_id','=', 0);
+    }
+
 }

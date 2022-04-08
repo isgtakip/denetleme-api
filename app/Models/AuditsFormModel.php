@@ -23,4 +23,9 @@ class AuditsFormModel extends Model
         'audit_form_score_needed',
     ];
 
+    public function sections(){
+        return $this->hasMany(Sections::class,'audit_form_id');
+    }
+
+
 }
