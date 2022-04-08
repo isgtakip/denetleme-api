@@ -81,6 +81,7 @@ class AuditsController extends Controller
             if ($request->status=="Devam")  $q->where("o1.durum","=","Devam Ediyor");
             if ($request->status=="Completed")  $q->where("o1.durum","=","Tamamlandı");
             if ($request->status=="Decline")  $q->where("o1.status","=",0);
+            if ($request->status=="Active")  $q->where("o1.status","=",1);
         }
 
 
