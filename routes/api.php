@@ -65,9 +65,9 @@ Route::post('/sanctum/token', function (Request $request) {
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    
 Route::apiResource('audit_forms',AuditsFormController::class);
 Route::resource('audit_forms.sections', SectionController::class)->shallow();
-
 Route::apiResource('icons',IconsController::class);
 Route::apiResource('questiontypes',QtypesController::class);
 Route::get('getAllPermissionsAttribute', [AbilitesController::class, 'getAllPermissionsAttribute']);
@@ -75,7 +75,6 @@ Route::post('addSections', [SectionController::class, 'addSections']);
 Route::resource('sections.questions', QuestionsController::class)->shallow();;
 Route::post('addQuestion', [QuestionsController::class, 'addQuestion']);
 Route::apiResource('optionsets',OptionSetsController::class);
-
 Route::resource('optionsets.options', OptionsController::class)->shallow();
 Route::get('firma_form_data',[FirmsController::class, 'formsData']);
 Route::get('ana_firmalar',[FirmsController::class, 'getAnaFirmalar']);
@@ -85,10 +84,8 @@ Route::get('il',[IlController::class, 'index']);
 Route::resource('roles',RoleController::class);
 Route::resource('users',UserController::class);
 Route::get('getAllRoles',[RoleController::class, 'getAllRoles']);
- 
 Route::apiResource('firmalar',FirmsController::class);
 Route::get('il',[IlController::class, 'index']);
-
 Route::resource('audits.forms', QuizController::class);
 Route::apiResource('audits',AuditsController::class);
 Route::apiResource('nace_kodlari',NaceKodlariController::class);
