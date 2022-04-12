@@ -18,3 +18,4 @@ class QTypes extends Model
         'answer_type',
     ];
 }
+

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Models\Qtypes;
+use App\Models\QTypes;
 
 class QtypesController extends Controller
 {
@@ -14,7 +14,7 @@ class QtypesController extends Controller
     public function index()
     {
         //
-        $qtypes = Qtypes::get();
+        $qtypes = QTypes::get();
         return response()->json($qtypes,200);
     }
 
