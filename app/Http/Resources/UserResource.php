@@ -21,7 +21,8 @@ class UserResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'roles' => $this->getRoleNames(),
-            'permissions'=> $this->getAllPermissions()->pluck('name')
+            'permissions'=> $this->getAllPermissions()->pluck('name'),
+            'customer_id' => $this->customer_id
         ];
     }
 }

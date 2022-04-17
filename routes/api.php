@@ -96,6 +96,7 @@ Route::group(['middleware' => ['role:Super Admin']], function () {
     Route::apiResource('customers',CustomerController::class);
 });
 
+Route::get('getAllCustomersWithoutPage',[CustomerController::class,'getAllCustomersWithoutPage']);
 Route::get('getAllAuditForms',[AuditsFormController::class, 'getAllAuditForms']);
 
 

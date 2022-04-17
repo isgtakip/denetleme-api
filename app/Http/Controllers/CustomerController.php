@@ -25,6 +25,11 @@ class CustomerController extends Controller
         ->paginate($per_page)->appends(request()->query()),200);
     }
 
+    public function getAllCustomersWithoutPage(){
+        $customers = Customers::get();
+        return response()->json($customers,200);
+    }
+
     /**
      * Show the form for creating a new resodurce.
      *
@@ -78,8 +83,8 @@ class CustomerController extends Controller
     public function edit($id)
     {
         //
+        
     }
-
     /**
      * Update the specified resource in storage.
      *
