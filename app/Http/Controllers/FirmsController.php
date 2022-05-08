@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\FirmsModel;
 use App\Models\FirmaTipleri;
+use App\Models\Customers;
+use DB;
+
 
 class FirmsController extends Controller
 {
@@ -71,24 +74,21 @@ class FirmsController extends Controller
      */
     public function store(Request $request)
     {
-        //
-
-        $search="";
-        //yeni kayıt eklemek için burayı kullanacaz 
-        $firma = new FirmsModel();
-        $firma->firma_tam_unvan = $request->firma_unvan;
-        $firma->firma_tip_id = $request->firma_tip_id;
-        $firma->firma_kisa_ad = $request->firma_kisa_ad;
-        $firma->ust_firma_id= $request->ust_firma_id;
-        $firma->firma_turu=$request->firma_turu;
-        $firma->sahis_ad_soyad=$request->sahis_ad_soyad;
-        $firma->nace_kod_id=$request->nace_kod_id;
-        $firma->firma_sgk=$request->firma_sgk;
-        $firma->firma_il_id=$request->firma_il_id;
-        $firma->firma_ilce_id=$request->firma_ilce_id;
-
-
-        $firma->save();
+       
+        DB::table('firms')->insert(
+            array('firma_tam_unvan' => $request->firma_unvan,
+                  'firma_tip_id' =>  $request->firma_tip_id,
+                  'firma_kisa_ad' =>  $request->firma_kisa_ad,
+                  'ust_firma_id' =>  $request->ust_firma_id,
+                  'firma_turu' =>  $request->firma_turu,
+                  'sahis_ad_soyad' =>  $request->sahis_ad_soyad,
+                  'nace_kod_id' =>  $request->nace_kod_id,
+                  'firma_sgk' =>  $request->firma_sgk,
+                  'firma_il_id' =>  $request->firma_il_id,
+                  'firma_ilce_id' =>  $request->firma_ilce_id,
+                  'firm_adres' =>  $request->firm_adres,
+                  'customer_id' =>  $request->customer_id)
+        );
         
         //firma bilgileri geri döndürülecek daha sonra 
  
@@ -145,6 +145,7 @@ class FirmsController extends Controller
          $firma->firma_sgk=$request->firma_sgk;
          $firma->firma_il_id=$request->firma_il_id;
          $firma->firma_ilce_id=$request->firma_ilce_id;
+         $firma->customer_id=$request->customer_id;
          $firma->update();
          
          //firma bilgileri geri döndürülecek daha sonra 

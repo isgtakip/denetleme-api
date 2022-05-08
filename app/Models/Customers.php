@@ -19,4 +19,8 @@ class Customers extends Model
         'customer_domain',
     ];
 
+    public function firms(){
+        return $this->hasMany(Firms::class,'customer_id');
+    }
+
 }

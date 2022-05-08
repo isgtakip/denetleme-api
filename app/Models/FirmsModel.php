@@ -14,6 +14,8 @@ class FirmsModel extends Model
     protected $primaryKey = 'firma_id';
     public $timestamps = false;
 
+    protected $casts = [ 'firma_id' => 'integer', 'ust_firma_id'  => 'integer'];
+
     protected $fillable = [
         'firma_tam_unvan',
         'firma_kisa_ad',
@@ -27,4 +29,9 @@ class FirmsModel extends Model
         'firma_turu',
         'customer_id'
     ];
+
+    public function customers()
+    {
+        return $this->belongsTo(Customers::class,'customer_id');
+    }
 }
