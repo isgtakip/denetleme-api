@@ -62,10 +62,12 @@ class AuthController extends Controller
           //return response()->json(Auth::user(), 200);
         }
 
+    
 
         throw ValidationException::withMessages([
-          'email' => 'The provided credentails are incorect.'
+          'email' => 'Email ve Şifre Sistemde Kayıtlı Değil.'
         ]);
+
 
       }
 
