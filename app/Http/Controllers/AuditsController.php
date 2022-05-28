@@ -87,6 +87,7 @@ class AuditsController extends Controller
             if ($request->status=="Decline")  $q->where("o1.status","=",0);
             if ($request->status=="Active")  $q->where("o1.status","=",1);
         }
+    
 
 
         return response()->json($q->paginate(5)->appends(request()->query()),200);
