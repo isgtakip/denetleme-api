@@ -39,7 +39,7 @@ class AuditsController extends Controller
 
 
 
-
+        $search = $request->query('search');
 
         $audits = 
         DB::table('audits')
@@ -69,6 +69,10 @@ class AuditsController extends Controller
         ->leftJoin('il as il','il.id','=','firm.firma_il_id')
         ->leftJoin('ilce as ilce','ilce.id','=','firm.firma_ilce_id')
         ->where("q.up_question_id","=",0)
+        ->where(function($query) use ($search) {
+            $query->where('firm.firma_tam_unvan', 'like', '%'.$search.'%')
+            ->orWhere('firm.firma_kisa_ad', 'like', '%'.$search.'%');
+        })
         //->where("audits.status",'=',1)
         ->groupBy('loc.audit_location_id');
         //->get();

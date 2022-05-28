@@ -87,7 +87,7 @@ Route::get('getAllRoles',[RoleController::class, 'getAllRoles']);
 Route::apiResource('firmalar',FirmsController::class);
 Route::get('il',[IlController::class, 'index']);
 Route::resource('audits.forms', QuizController::class);
-Route::apiResource('audits',AuditsController::class);
+
 Route::apiResource('nace_kodlari',NaceKodlariController::class);
 
 
@@ -102,3 +102,4 @@ Route::get('getAllAuditForms',[AuditsFormController::class, 'getAllAuditForms'])
 
 });
 
+Route::apiResource('audits',AuditsController::class);
